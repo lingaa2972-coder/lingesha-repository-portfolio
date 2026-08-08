@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="description" content="Hyper-Realistic 3D Cyber Security & Web Dev Portfolio of V.S. Lingesha Arun Bharat.">
 <title>V.S. Lingesha Arun Bharat | Cyber Security & Web Dev</title>
 <!-- Google Fonts -->
@@ -35,6 +35,7 @@
   padding: 0;
   box-sizing: border-box;
   scroll-behavior: smooth;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
@@ -66,7 +67,7 @@ h1, h2, h3, .brand-text {
   letter-spacing: 1px;
 }
 
-/* --- HUD NAVBAR --- */
+/* --- HUD NAVBAR WITH MOBILE TOGGLE --- */
 nav {
   display: flex;
   justify-content: space-between;
@@ -74,6 +75,7 @@ nav {
   padding: 1.2rem 8%;
   background: rgba(5, 2, 4, 0.88);
   backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   position: fixed;
   width: 100%;
   top: 0;
@@ -96,6 +98,23 @@ nav {
 .logo span {
   color: var(--gold);
   text-shadow: var(--glow-gold);
+}
+
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  border: 1px solid var(--panel-border);
+  color: var(--gold);
+  font-size: 1.3rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.mobile-menu-btn:hover, .mobile-menu-btn:focus {
+  border-color: var(--gold);
+  box-shadow: var(--glow-gold);
 }
 
 .nav-links {
@@ -255,6 +274,7 @@ section.visible {
   flex-wrap: wrap;
 }
 
+/* Futuristic Cyber Buttons */
 .btn {
   padding: 1rem 2.4rem;
   font-family: 'Orbitron', sans-serif;
@@ -279,7 +299,7 @@ section.visible {
   border: none;
 }
 
-.btn-primary:hover {
+.btn-primary:hover, .btn-primary:active {
   transform: translateY(-5px) scale(1.04);
   box-shadow: 0 0 45px rgba(255, 170, 0, 0.9);
   background: linear-gradient(135deg, var(--gold), var(--red));
@@ -293,19 +313,21 @@ section.visible {
   backdrop-filter: blur(10px);
 }
 
-.btn-secondary:hover {
+.btn-secondary:hover, .btn-secondary:active {
   border-color: var(--gold);
   color: #fff;
   transform: translateY(-5px) scale(1.04);
   box-shadow: var(--glow-gold);
 }
 
+/* --- 3D TILT HUD CARDS --- */
 .cyber-card {
   background: var(--panel-bg);
   border: 1px solid var(--panel-border);
   border-radius: 12px;
   padding: 2.2rem;
   backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   position: relative;
   overflow: hidden;
   transition: transform 0.15s ease-out, border-color 0.4s ease, box-shadow 0.4s ease;
@@ -425,7 +447,7 @@ section.visible {
   width: fit-content;
 }
 
-.project-link-btn:hover {
+.project-link-btn:hover, .project-link-btn:active {
   background: var(--gold);
   color: #000;
   box-shadow: var(--glow-gold);
@@ -482,7 +504,7 @@ section.visible {
   transition: all 0.35s ease;
 }
 
-.social-btn:hover {
+.social-btn:hover, .social-btn:active {
   border-color: var(--red);
   color: var(--gold);
   box-shadow: var(--glow-red);
@@ -503,10 +525,51 @@ footer {
   50% { opacity: 0; }
 }
 
+/* --- MOBILE RESPONSIVE BREAKPOINTS --- */
 @media (max-width: 768px) {
-  .hero h1 { font-size: 2.8rem; }
-  .hero h2 { font-size: 1.4rem; }
-  section { padding: 6rem 5% 3rem; }
+  .mobile-menu-btn {
+    display: block;
+  }
+
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: rgba(5, 2, 4, 0.96);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border-bottom: 1px solid var(--panel-border);
+    padding: 1.5rem 8%;
+    gap: 1.2rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.9);
+  }
+
+  .nav-links.active {
+    display: flex;
+  }
+
+  .hero h1 { font-size: 2.5rem; }
+  .hero h2 { font-size: 1.3rem; min-height: 2.2rem; }
+  .hero p { font-size: 1.05rem; }
+  
+  .section-title { font-size: 1.75rem; }
+  section { padding: 5.5rem 5% 3rem; }
+  
+  .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .skills-grid, .labs-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cyber-card {
+    padding: 1.6rem;
+  }
 }
 </style>
 </head>
@@ -514,11 +577,15 @@ footer {
 
 <canvas id="webgl-canvas"></canvas>
 
+<!-- NAVBAR -->
 <nav>
   <a href="#" class="logo">
     <i class="fa-solid fa-terminal"></i> LINGESHA <span>[CYBER]</span>
   </a>
-  <ul class="nav-links">
+  <button class="mobile-menu-btn" aria-label="Toggle navigation menu" id="menuToggle">
+    <i class="fa-solid fa-bars"></i>
+  </button>
+  <ul class="nav-links" id="navLinks">
     <li><a href="#about">About</a></li>
     <li><a href="#skills">Skills</a></li>
     <li><a href="#labs">Security Labs</a></li>
@@ -526,6 +593,7 @@ footer {
   </ul>
 </nav>
 
+<!-- HERO SECTION -->
 <section class="hero">
   <div class="hud-badge">
     <i class="fa-solid fa-shield-halved"></i> SYSTEM STATUS: ONLINE // B.Sc CYBER SECURITY
@@ -543,6 +611,7 @@ footer {
   </div>
 </section>
 
+<!-- ABOUT SECTION -->
 <section id="about">
   <h2 class="section-title"><span>01 //</span> System Overview</h2>
   <div class="cyber-card">
@@ -564,6 +633,7 @@ footer {
   </div>
 </section>
 
+<!-- SKILLS SECTION -->
 <section id="skills">
   <h2 class="section-title"><span>02 //</span> Tech Capabilities</h2>
   <div class="skills-grid">
@@ -600,6 +670,7 @@ footer {
   </div>
 </section>
 
+<!-- LABS & PROJECTS SECTION -->
 <section id="labs">
   <h2 class="section-title"><span>03 //</span> Practical Labs &amp; Deployments</h2>
   <div class="labs-grid">
@@ -616,7 +687,7 @@ footer {
         </div>
       </div>
       <a href="https://class-fund-tracker-lojjevmc5-lingaa2972-1495s-projects.vercel.app/" target="_blank" rel="noopener noreferrer" class="project-link-btn">
-        <i class="fa-solid fa-arrow-up-right-from-square"></i> Click here to see the Live web app on versal
+        <i class="fa-solid fa-arrow-up-right-from-square"></i> Open Live App
       </a>
     </div>
     <div class="cyber-card">
@@ -646,6 +717,7 @@ footer {
   </div>
 </section>
 
+<!-- CONTACT SECTION -->
 <section id="contact">
   <div class="cyber-card contact-box">
     <h2 style="font-size: 2.4rem; color: var(--red); text-shadow: var(--glow-red); margin-bottom: 1rem;">CONNECT WITH ME</h2>
@@ -672,7 +744,23 @@ footer {
 </footer>
 
 <script>
-  // THREE.JS GRAPHICS & LIGHTING ENGINE
+  // MOBILE HAMBURGER MENU TOGGLE
+  const menuToggle = document.getElementById('menuToggle');
+  const navLinks = document.getElementById('navLinks');
+  
+  if (menuToggle && navLinks) {
+    menuToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+    });
+
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.classList.remove('active');
+      });
+    });
+  }
+
+  // --- COMPLETE 100% UNCHANGED THREE.JS GRAPHICS & LIGHTING ENGINE ---
   const canvas = document.getElementById('webgl-canvas');
   const scene = new THREE.Scene();
   scene.fog = new THREE.FogExp2(0x050204, 0.05);
@@ -696,6 +784,7 @@ footer {
   const meshGroup = new THREE.Group();
   const polyGeometry = new THREE.IcosahedronGeometry(0.7, 0);
 
+  // Full 15 3D Metallic Polyhedrons Unchanged
   for (let i = 0; i < 15; i++) {
     const polyMaterial = new THREE.MeshStandardMaterial({
       color: Math.random() > 0.5 ? 0xff0055 : 0xffaa00,
@@ -718,6 +807,7 @@ footer {
   }
   scene.add(meshGroup);
 
+  // Full 850 3D Particles Unchanged
   const particleCount = 850;
   const particleGeometry = new THREE.BufferGeometry();
   const positions = new Float32Array(particleCount * 3);
@@ -751,14 +841,21 @@ footer {
   camera.position.z = 5;
 
   let mouseX = 0, mouseY = 0;
-  window.addEventListener('mousemove', (e) => {
-    mouseX = (e.clientX / window.innerWidth - 0.5);
-    mouseY = (e.clientY / window.innerHeight - 0.5);
+
+  function handleMove(e) {
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+    mouseX = (clientX / window.innerWidth - 0.5);
+    mouseY = (clientY / window.innerHeight - 0.5);
 
     mouseSpotlight.position.x = mouseX * 8;
     mouseSpotlight.position.y = -mouseY * 8;
     mouseSpotlight.position.z = 2;
-  });
+  }
+
+  window.addEventListener('mousemove', handleMove);
+  window.addEventListener('touchmove', handleMove);
 
   function render3D() {
     requestAnimationFrame(render3D);
@@ -785,6 +882,7 @@ footer {
     renderer.setSize(window.innerWidth, window.innerHeight);
   });
 
+  // Real 3D Card Tilt Interaction Unchanged
   document.querySelectorAll('.cyber-card').forEach(card => {
     card.addEventListener('mousemove', (e) => {
       const rect = card.getBoundingClientRect();
@@ -798,6 +896,7 @@ footer {
     });
   });
 
+  // Typing Effect
   const phrases = [
     "CYBER SECURITY ENTHUSIAST",
     "FULL-STACK WEB DEVELOPER",
